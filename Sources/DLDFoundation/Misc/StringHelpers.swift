@@ -70,7 +70,7 @@ public extension String {
     /// - parameter replacement: The string with which to replace `target`.
     ///
     /// - returns: A new string in which all occurrences of `target` in the string are replaced by `replacement`.
-    func replacing(target: String, with replacement: String) -> String {
+    func replacing(_ target: String, with replacement: String) -> String {
         return replacingOccurrences(of: target, with: replacement)
     }
     
