@@ -29,11 +29,11 @@ public extension Bundle {
     }
     /// The name of the application with all spaces replaced by an underscore `_`.
     var underscoredName: String {
-        return name.replacing(target: " ", with: "_")
+        return name.replacing(" ", with: "_")
     }
     /// The name of the application with all spaces replaced by a dash `-`.
     var dashedName: String {
-        return name.replacing(target: " ", with: "-")
+        return name.replacing(" ", with: "-")
     }
     
     // MARK: - Getting Bundle Information
