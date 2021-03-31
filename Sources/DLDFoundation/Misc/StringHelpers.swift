@@ -79,7 +79,7 @@ public extension String {
     /// - Parameter target: The substring to remove.
     /// - Returns: A new string in which all occurrences of `target` have been removed.
     func removing(_ target: String) -> String {
-        return replacing(target: target, with: "")
+        return replacing(target, with: "")
     }
     
     /// /// Returns an array containing substrings from the string that have been divided by the given value conforming to the string protocol.
