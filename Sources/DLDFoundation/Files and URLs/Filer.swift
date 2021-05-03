@@ -111,6 +111,10 @@ public class Filer : FileManager {
         createDirectory(at: url.path).fileURL
     }
     
+    @discardableResult public func createSupportDirectory(named name: String) -> URL {
+        createDirectory(at: .appSupportDocs + name)
+    }
+    
     // MARK: - Deleting Files and Folders
     /// Permanently removes, i.e. deletes, the file or directory at the specified URL from the system.
     func removeFile(at url: URL) throws {

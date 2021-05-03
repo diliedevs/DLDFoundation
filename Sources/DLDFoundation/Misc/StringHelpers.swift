@@ -161,6 +161,20 @@ public extension String {
     }
 }
 
+public extension String {
+    enum SpacePlacement {
+        case before, after, none
+    }
+    
+    func spaced(_ placement: SpacePlacement) -> String {
+        switch placement {
+        case .before : return prefix(with: " ")
+        case .after  : return suffix(with: " ")
+        case.none    : return self
+        }
+    }
+}
+
 public extension NSString {
     /// Returns the range of the entire string.
     var range: NSRange {

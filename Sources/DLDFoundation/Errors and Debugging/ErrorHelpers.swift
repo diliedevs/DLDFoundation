@@ -27,6 +27,11 @@ public extension Error {
     func log(then handle: Handler? = nil) {
         self.log(withMessage: "Unhandled error", then: handle)
     }
+    
+    func fatalize(while doing: String = "") {
+        let spacedDoing = doing.isEmpty ? "" : " \(doing)"
+        fatalError("Fatal error\(spacedDoing): \(localizedDescription)")
+    }
 }
 
 public extension NSError {

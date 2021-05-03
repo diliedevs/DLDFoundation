@@ -49,19 +49,16 @@ public extension NSManagedObject {
     }
     
     // MARK: - Getting Values
-    /// Returns the value of the specified key as a `Double`.
-    ///
-    /// - parameter key: The property key for which to get the value.
-    ///
-    /// - returns: The value of `key` as a `Double` or `0.0` if the value could not be cast as a `Double`.
-    func double(for key: String) -> Double {
-        return value(forKey: key) as? Double ?? 0.0
-    }
-    
     /// Returns the number of objects of the managed object using its default fetch request.
     /// - Parameter context: The context that should count the objects.
     class func count(in context: NSManagedObjectContext) -> Int {
         guard let count = try? context.count(for: Self.fetchRequest()) else { return 0 }
         return count
+    }
+}
+
+public extension Sequence where Element: NSManagedObject {
+    func sum<Value: Numeric>(of keyPath: KeyPath<Element, Value>) -> Value {
+        self.map({ $0[keyPath: keyPath] }).reduce(0, +)
     }
 }

@@ -30,6 +30,10 @@ public extension BinaryInteger {
     var bool: Bool {
         return self == 1
     }
+    /// Returns the string representation of the integer.
+    var string: String {
+        return "\(self)"
+    }
     /// Returns `true` if the integer is zero.
     var isZero: Bool {
         return self == .zero
@@ -76,6 +80,10 @@ public extension BinaryFloatingPoint {
     /// Returns the binary floating point as the equivalent value in the `CGFloat` type.
     var cgfloat: CGFloat {
         return CGFloat(self)
+    }
+    /// Returns the string representation of the binary floating point.
+    var string: String {
+        return "\(self)"
     }
     /// Returns `true` if the binary floating point is **not** zero.
     var isNotZero: Bool {

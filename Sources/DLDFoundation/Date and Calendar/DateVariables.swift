@@ -30,6 +30,10 @@ public extension Date {
     static var thisYear: Int {
         return today.year
     }
+    /// A date value of 00:00:00 UTC on 1 January 1970.
+    static var unknown: Date {
+        Date(timeIntervalSince1970: 0)
+    }
     
     // MARK: - Getting Date Components
     /// All components of the `Date` object.
@@ -79,6 +83,10 @@ public extension Date {
                 return [4, 6, 9, 11].contains(month) ? 30 : 31
             }
         }
+    }
+    /// Returns `true` if the date value is 00:00:00 UTC on 1 January 1970.
+    var isUnknown: Bool {
+        self == .unknown
     }
     
     // MARK: - Converting to NSDate

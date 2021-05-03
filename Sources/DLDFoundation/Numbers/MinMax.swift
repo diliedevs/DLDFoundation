@@ -41,3 +41,9 @@ public struct MinMax {
         return includingMax ? closedRange.contains(element) : range.contains(element)
     }
 }
+
+public extension MinMax {
+    static let none   = MinMax(0, 0)
+    static let ohTwo  = MinMax(0, 2)
+    static let twoTwo = MinMax(2, 2)
+}

@@ -79,6 +79,8 @@ public extension URL {
         return withoutExtension.lastPathComponent
     }
     
+    var data: Data? { try? Data(contentsOf: self) }
+    
     // MARK: - Creating URLs
     /// Creates a file URL with the specified path.
     /// - Parameter filePath: The path to the file for which to create a URL.

@@ -52,12 +52,22 @@ public extension Sequence {
             return try isIncluded($0)
         }
     }
+    
+    func grouped<Value: Comparable>(by keyPath: KeyPath<Element, Value>) -> [Value: [Element]] {
+        Dictionary(grouping: self) { $0[keyPath: keyPath] }
+    }
 }
 
 public extension Sequence where Element: StringProtocol {
     /// A string representing all the elements of the sequence joined together by a comma and a space (`, `).
     var commaSeparated: String {
         joined(separator: ", ")
+    }
+}
+
+public extension Sequence where Element: Numeric {
+    func sum() -> Element {
+        reduce(0, +)
     }
 }
 
