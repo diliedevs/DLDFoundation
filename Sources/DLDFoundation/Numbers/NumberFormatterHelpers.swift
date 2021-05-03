@@ -23,7 +23,7 @@ public extension NumberFormatter {
         /// Do not display negative values.
         case none
         
-        static let stdPrefix = Self.prefix("-")
+        public static let stdPrefix = Self.prefix("-")
         
         var width: Int {
             switch self {
