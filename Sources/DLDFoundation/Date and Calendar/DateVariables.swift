@@ -10,7 +10,10 @@ import Foundation
 
 public extension Date {
     // MARK: - Common Date Indicators
+    
     /// The current date and time.
+    @available(macOS, obsoleted: 12, message: "Swift now has this same static property.")
+    @available(iOS, obsoleted: 15, message: "Swift now has this same static property.")
     static var now: Date {
         return Date()
     }

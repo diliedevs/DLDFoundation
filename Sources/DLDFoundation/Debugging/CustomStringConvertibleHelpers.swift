@@ -12,16 +12,11 @@ public extension CustomStringConvertible {
     /// Returns a textual representation of this instance.
     var description: String {
         let objName = type(of: self)
-        let props = Mirror(reflecting: self).children
-        let propVals = props.compactMap { (arg) -> String? in
-            let (label, value) = arg
-            guard let name = label else { return nil }
-            
-            return "\t\(name): \(value)\n"
-        }
+        let mirror = Mirror(reflecting: self)
+        let props = mirror.properties.map { "\t\($0.description)\n" }
         
         var desc = "\(objName) {\n"
-        desc += propVals.joined()
+        desc += props.joined()
         desc += "}"
         
         return desc
@@ -33,16 +28,11 @@ public extension CustomStringConvertible {
     var debugDescription: String {
         let objName = type(of: self)
         let address = Unmanaged.passRetained(self as AnyObject).toOpaque()
-        let props = Mirror(reflecting: self).children
-        let propVals = props.compactMap { (arg) -> String? in
-            let (label, value) = arg
-            guard let name = label else { return nil }
-            
-            return "\t\(name): \(value)\n"
-        }
+        let mirror = Mirror(reflecting: self)
+        let props = mirror.properties.map { "\t\($0.description)\n" }
         
         var desc = "\(objName) <\(address)> {\n"
-        desc += propVals.joined()
+        desc += props.joined()
         desc += "}"
         
         return desc

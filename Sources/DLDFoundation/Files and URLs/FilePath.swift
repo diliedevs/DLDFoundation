@@ -24,6 +24,14 @@ public extension FilePath {
     var fullUserPath: FilePath {
         return hasPrefix("~") ? Self.home + dropFirst() : self
     }
+    /// A new string that replaces the current home directory portion of the current path with a tilde (~) character.
+    var abbreviated: FilePath {
+        ns.abbreviatingWithTildeInPath
+    }
+    /// A new string made by expanding the initial component of the receiver to its full path value.
+    var expanded: FilePath {
+        ns.expandingTildeInPath
+    }
     /// Returns the file url of the fully expanded path.
     var fileURL: URL {
         return URL(filePath: self.fullUserPath)
@@ -85,26 +93,11 @@ public extension FilePath {
     }
     
     /// Moves the file or directory at the receiver's path to the trash.
-    @available(iOS 11.0, *)
     func trash() throws {
         try Filer.shared.trashFile(at: fileURL)
     }
     
-    // MARK: - Moving and Copying Files
-    func move(toDirectory directory: URL, preferredName: String = "", then handleDestination: ((FilePath) -> Void) = { _ in }) throws {
-        try Filer.shared.moveFile(at: fileURL, to: directory, preferredName: preferredName, then: { url in
-            handleDestination(url.path)
-        })
-    }
-    
-    func copy(toDirectory directory: URL, preferredName: String = "", then handleDestination: ((FilePath) -> Void) = { _ in }) throws {
-        try Filer.shared.copyFile(at: fileURL, to: directory, preferredName: preferredName, then: { url in
-            handleDestination(url.path)
-        })
-    }
-    
     // MARK: - Discovering Directory Contents
-    
     /// Performs a search of the receiving directory path and returns the file paths for any contained items.
     ///
     /// - parameter deep: Set to `true` to perform a deep enumeration descending into subdirectories and packages.
@@ -113,7 +106,6 @@ public extension FilePath {
     /// - parameter includePackageContents: Set to `true` to include package contents in the result. Default is set to `false`, skipping package descendants, treating packages like files.
     ///
     /// - returns: An array of file paths for the contents of the specified directory.
-    @available(OSX 10.11, iOS 9.0, *)
     func contentsOfDirectory(deepEnumeration deep: Bool, relativePaths: Bool = true, includeHidden: Bool = false, includePackageContents: Bool = false) throws -> [FilePath] {
         guard isFolder else { return [] }
 
@@ -121,14 +113,22 @@ public extension FilePath {
         return urls.map { relativePaths ? $0.relativePath : $0.path }
     }
     
-    @available(OSX 10.11, iOS 9.0, *)
+    /// Performs a shallow search of the receiving file path and returns the paths for any contained items.
+    /// - Parameters:
+    ///   - includeHidden: Set to `true` to include hidden files in the result. Default is set to `false`, skipping hidden files.
+    /// - Returns: An array of file paths for the contents of the receiving file path.
     func quickScan(includeHidden: Bool = false) throws -> [FilePath] {
         guard isFolder else { return [] }
         
         let urls = try Filer.shared.quickScan(url: fileURL, includeHidden: includeHidden)
         return urls.map(\.path)
     }
-    @available(OSX 10.11, iOS 9.0, *)
+    /// Performs a deep search of the receiving file path and returns the paths for any contained items.
+    /// - Parameters:
+    ///   - relativePaths: Set to `false` to return full paths. Default is set to `true`, returning relative paths.
+    ///   - includeHidden: Set to `true` to include hidden files in the result. Default is set to `false`, skipping hidden files.
+    ///   - includePackageContents: Set to `true` to include package contents in the result. Default is set to `false`, skipping package descendants, treating packages like files.
+    /// - Returns: An array of file paths for the contents of the receiving file path.
     func recursiveScan(relativePaths: Bool = true, includeHidden: Bool = false, includePackageContents: Bool = false) throws -> [FilePath] {
         return try contentsOfDirectory(deepEnumeration: true, relativePaths: relativePaths, includeHidden: includeHidden, includePackageContents: includePackageContents)
     }

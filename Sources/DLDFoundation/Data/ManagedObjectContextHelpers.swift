@@ -21,14 +21,9 @@ public extension NSManagedObjectContext {
     }
     
     // MARK: - Saving Changes
-    func securelySave(handlingError handle: Error.Handler? = nil) {
+    func securelySave() throws {
         guard self.hasChanges else { return }
-        
-        do {
-            try self.save()
-        } catch let error {
-            error.log(withMessage: "Saving Data Error", then: handle)
-        }
+        try self.save()
     }
     
     // MARK: - Fetching Objects
@@ -39,18 +34,13 @@ public extension NSManagedObjectContext {
     ///   - sortDescriptors: An array of sort descriptors to sort the objects by. Use an empty array (default) for no sort descriptors.
     ///   - predicate: A predicate to constrain the selection of objects to fetch. A value of `nil` (default) means no constraints.
     /// - Returns: An array of objects that meet the criteria specified by `request` fetched from the `CoreDataStack` managed object context and from the persistent stores associated with the conetxt's persistent store coordinator. If no objects match the criteria specified by `request`, `sortDescriptors`, and `predicate`, or an error occurs, returns an empty array.
-    func fetch<T: NSManagedObject>(_ request: NSFetchRequest<T>, sortDescriptors: [NSSortDescriptor] = [], predicate: NSPredicate? = nil) -> [T] {
+    func fetch<T: NSManagedObject>(_ request: NSFetchRequest<T>, sortDescriptors: [NSSortDescriptor] = [], predicate: NSPredicate? = nil) throws -> [T] {
         let newRequest          = request
         request.sortDescriptors = sortDescriptors
         request.predicate       = predicate
         
-        do {
-            let result = try fetch(newRequest)
-            return result
-        } catch {
-            error.log()
-            return []
-        }
+        let result = try fetch(newRequest)
+        return result
     }
     
     /// Fetches the object of the `request` type with the given predicate.
@@ -60,9 +50,9 @@ public extension NSManagedObjectContext {
     ///   - predicate: A predicate to constrain the selection of objects to fetch.
     /// - Returns: The first object of the `request` type that meets the criteria of the predicate, or `nil` if one could not be found.
     func fetchObject<T: NSManagedObject>(withRequest request: NSFetchRequest<T>, predicate: NSPredicate) -> T? {
-        let result = fetch(request, predicate: predicate)
+        let result = try? fetch(request, predicate: predicate)
         
-        return result.first
+        return result?.first
     }
     
     /// Returns the managed object with the specified URI in the context.

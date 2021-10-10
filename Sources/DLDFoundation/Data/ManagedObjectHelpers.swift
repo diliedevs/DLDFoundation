@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-@available(iOS 10.0, OSX 10.12, *)
 public extension NSManagedObject {
     // MARK: - Getting a Managed Object's Identity
     /// Returns the entity name for the managed object.

@@ -29,35 +29,35 @@ public extension PropertyListEncoder {
         }
     }
 }
+//
+//public extension DecodingError {
+//    var cause: String {
+//        switch self {
+//        case .keyNotFound(let key, _): return "missing key '\(key.stringValue)'"
+//        case .typeMismatch(let type, _): return "type mismatch of '\(type)'"
+//        case .valueNotFound(let type, _): return "missing \(type) value"
+//        case .dataCorrupted(_): return "invalid file format"
+//        case _: return localizedDescription
+//        }
+//    }
+//
+//    func message(using file: String) -> String {
+//        "Failed to decode \(file) due to \(cause)"
+//    }
+//}
 
-public extension DecodingError {
-    var cause: String {
-        switch self {
-        case .keyNotFound(let key, _): return "missing key '\(key.stringValue)'"
-        case .typeMismatch(let type, _): return "type mismatch of '\(type)'"
-        case .valueNotFound(let type, _): return "missing \(type) value"
-        case .dataCorrupted(_): return "invalid file format"
-        case _: return localizedDescription
-        }
-    }
-    
-    func message(using file: String) -> String {
-        "Failed to decode \(file) due to \(cause)"
-    }
-}
-
-public extension EncodingError {
-    var cause: String {
-        switch self {
-        case .invalidValue(let value, _): return "invalid value of \(value)"
-        case _: return localizedDescription
-        }
-    }
-    
-    func message(using file: String) -> String {
-        "Failed to encode \(file) due to \(cause)"
-    }
-}
+//public extension EncodingError {
+//    var cause: String {
+//        switch self {
+//        case .invalidValue(let value, _): return "invalid value of \(value)"
+//        case _: return localizedDescription
+//        }
+//    }
+//    
+//    func message(using file: String) -> String {
+//        "Failed to encode \(file) due to \(cause)"
+//    }
+//}
 
 public extension Data {
     func jsonDecode<T: Decodable>(_ type: T.Type) throws -> T {

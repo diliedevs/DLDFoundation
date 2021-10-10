@@ -49,20 +49,6 @@ public extension String {
         return emailTest.evaluate(with: self)
     }
     
-    // MARK: - Initializing a mirroring string
-    /// Returns a string representing the subject, like a struct, i.e. `Subject(propertyName: propertyValue)`.
-    ///
-    /// - Parameter subject: The (class) object to represent.
-    init(mirroring subject: Any) {
-        let mirror = Mirror(reflecting: subject)
-        
-        let kids = mirror.children.map { child -> String in
-            if let label = child.label { return "\(label): \(child.value)" }
-            return ""
-        }
-        self.init("\(type(of: subject))(" + kids.joined(separator: ", ") + ")")
-    }
-    
     // MARK: - Modifying Strings
     /// Returns a new string in which all occurrences of the target string are replaced by another given string.
     ///
@@ -102,30 +88,6 @@ public extension String {
         return String(repeating: self, count: times)
     }
     
-    /// Returns a new string containing the characters of the receiver up to, but not including, the one at a given index.
-    ///
-    /// - Parameter index: An index as an `Int`. The value must lie within the bounds of the receiver, or be equal to the length of the receiver.
-    /// - Returns: A new string containing the characters of the receiver up to, but not including, the one at a given index.
-    func substring(to index: Int) -> String {
-        return ns.substring(to: index)
-    }
-    
-    /// Returns a new string containing the characters of the receiver from the one at a given index to the end.
-    ///
-    /// - Parameter index: An index as an `Int`. The value must lie within the bounds of the receiver, or be equal to the length of the receiver.
-    /// - Returns: A new string containing the characters of the receiver from the one at a given index to the end.
-    func substring(from index: Int) -> String {
-        return ns.substring(from: index)
-    }
-    
-    /// Returns the starting index or position of the given search string in the receiver as an `Int`.
-    ///
-    /// - Parameter searchString: The string to find the starting position of.
-    /// - Returns: The starting index or position of the given search string in the receiver as an `Int`.
-    func index(of searchString: String) -> Int {
-        return ns.range(of: searchString).location
-    }
-    
     /// Returns a new string with the given prefix removed from the receiver.
     /// - Parameter prefix: The prefix string to remove.
     func removingPrefix(_ prefix: String) -> String {
@@ -162,10 +124,19 @@ public extension String {
 }
 
 public extension String {
+    /// An enumeration of cases representing the placement of a space in a string.
     enum SpacePlacement {
-        case before, after, none
+        /// Inserts a space before the receiving string.
+        case before
+        /// Inserts a space after the receiving string.
+        case after
+        /// Does nothing to the receiving string, leaving it as is.
+        case none
     }
     
+    /// Returns the receiving string with a space according to the given placement.
+    /// - Parameter placement: The location of where the space should be placed.
+    /// - Returns: A new string with a space at the specified location.
     func spaced(_ placement: SpacePlacement) -> String {
         switch placement {
         case .before : return prefix(with: " ")

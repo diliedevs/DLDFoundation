@@ -77,8 +77,10 @@ public enum InfoPlistKey: String, CaseIterable {
     case buildVersion = "CFBundleVersion"
     /// The value for this key is a string specifying the release version of the application.
     case releaseVersion = "CFBundleShortVersionString"
-    /// The value for this key is a string of the form `n.n.n` representing the minimum version of the operating system required for the application to run.
+    /// The value for this key is a string of the form `n.n.n` representing the minimum version of the Mac operating system required for the application to run.
     case minimumSystemVersion = "LSMinimumSystemVersion"
+    /// The value for this key is a string of the form `n.n.n` representing the minimum version of the iOS, tvOS, and watchOS operating system required for the application to run.
+    case minimumOSVersion = "MinimumOSVersion"
     /// The value for this key is a human readable string representing the copyright notice for the application.
     case copyright = "NSHumanReadableCopyright"
 }

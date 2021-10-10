@@ -34,12 +34,11 @@ public extension URL {
     /// Returns the URL for the application support directory for the application of the current user.
     static var appSupportDocs: URL {
         let asd = appSupport.appendingPathComponent(Bundle.main.name, isDirectory: true)
-        Filer.shared.createDirectory(at: asd)
+        _ = try? Filer.shared.createDirectory(at: asd)
         
         return asd
     }
     /// Returns the URL for the local trash directory.
-    @available(iOS 11.0, OSX 10.0, *)
     static var trash: URL {
         return Filer.shared.localURL(for: .trashDirectory)
     }
@@ -53,7 +52,7 @@ public extension URL {
     
     /// Returns `true` if the URL path represents a directory.
     var isDirectory: Bool {
-        return pathExtension.isEmpty
+        return hasDirectoryPath
     }
     /// Returns `true` if the URL path represents a file.
     var isFile: Bool {
@@ -79,8 +78,6 @@ public extension URL {
         return withoutExtension.lastPathComponent
     }
     
-    var data: Data? { try? Data(contentsOf: self) }
-    
     // MARK: - Creating URLs
     /// Creates a file URL with the specified path.
     /// - Parameter filePath: The path to the file for which to create a URL.
@@ -96,12 +93,15 @@ public extension URL {
         lhs.appendingPathComponent(rhs)
     }
     
-    // MARK: - Reading and Writing Text
-    func readText() -> String? {
-        try? String(contentsOf: self)
+    // MARK: - Getting URL Contents
+    /// Returns the data contents of the file at the receiving URL, if there is any.
+    var data: Data? {
+        try? Data(contentsOf: self)
     }
-    func saveText(_ text: String, atomically: Bool = true, encoding: String.Encoding = .utf8) {
-        try? text.write(to: self, atomically: atomically, encoding: encoding)
+    
+    /// Returns the string contents of the file at the receiving URL, if there is any.
+    var string: String? {
+        try? String(contentsOf: self)
     }
     
     // MARK: - Discovering Directory Contents
@@ -113,17 +113,24 @@ public extension URL {
     /// - parameter includePackageContents: Set to `true` to include package contents in the result. Default is set to `false`, skipping package descendants, treating packages like files.
     ///
     /// - returns: An array of urls for the contents of the specified directory.
-    @available(OSX 10.11, iOS 9.0, *)
     func contentsOfDirectory(deepEnumeration deep: Bool, relativeURLs: Bool = true, includeHidden: Bool = false, includePackageContents: Bool = false) throws -> [URL] {
         guard isDirectory else { return [] }
         
         return try Filer.shared.contentsOfDirectory(at: self, deepEnumeration: deep, relativeURLs: relativeURLs, includeHidden: includeHidden, includePackageContents: includePackageContents)
     }
-    @available(OSX 10.11, iOS 9.0, *)
+    /// Performs a shallow search of the receiving directory URL and returns the URLs for any contained items.
+    /// - Parameters:
+    ///   - includeHidden: Set to `true` to include hidden files in the result. Default is set to `false`, skipping hidden files.
+    /// - Returns: An array of URLs for the contents of the receiving directory URL.
     func quickScan(includeHidden: Bool = false) throws -> [URL] {
         try Filer.shared.quickScan(url: self, includeHidden: includeHidden)
     }
-    @available(OSX 10.11, iOS 9.0, *)
+    /// Performs a deep search of the receiving directory URL and returns the URLs for any contained items.
+    /// - Parameters:
+    ///   - relativeURLs: Set to `false` to return full path URLs. Default is set to `true`, returning relative path URLs.
+    ///   - includeHidden: Set to `true` to include hidden files in the result. Default is set to `false`, skipping hidden files.
+    ///   - includePackageContents: Set to `true` to include package contents in the result. Default is set to `false`, skipping package descendants, treating packages like files.
+    /// - Returns: An array of URLs for the contents of the receiving directory URL.
     func recursiveScan(relativeURLs: Bool = true, includeHidden: Bool = false, includePackageContents: Bool = false) throws -> [URL] {
         try contentsOfDirectory(deepEnumeration: true, relativeURLs: relativeURLs, includeHidden: includeHidden, includePackageContents: includePackageContents)
     }

@@ -14,22 +14,25 @@ public extension Dictionary where Key == String {
     /// Returns the value associated with the given key as a `String`.
     ///
     /// - Parameter key: The key to find in the dictionary.
-    /// - Returns: The value associated with `key` as a `String`, or an empty string if the `key` is not in the dictionary.
-    func string(for key: String) -> String {
-        return self[key] as? String ?? ""
+    /// - Parameter defaultValue: A default string value to return in case the key is not present in the dictionary. This defaults to an empty string.
+    /// - Returns: The value associated with `key` as a `String`, or the default string value provided if the `key` is not in the dictionary.
+    func string(for key: String, defaultValue: String = "") -> String {
+        return self[key] as? String ?? defaultValue
     }
     /// Returns the value associated with the given key as an `Int`.
     ///
     /// - Parameter key: The key to find in the dictionary.
-    /// - Returns: The value associated with `key` as an `Int`, or `0` if the `key` is not in the dictionary.
-    func int(for  key: String) -> Int {
-        return self[key] as? Int ?? 0
+    /// - Parameter defaultValue: A default integer value to return in case the key is not present in the dictionary. This defaults to `0`.
+    /// - Returns: The value associated with `key` as an `Int`, or the default integer value provided if the `key` is not in the dictionary.
+    func int(for  key: String, defaultValue: Int = 0) -> Int {
+        return self[key] as? Int ?? defaultValue
     }
     /// Returns the value associated with the given key as a `Double`.
     ///
     /// - Parameter key: The key to find in the dictionary.
-    /// - Returns: The value associated with `key` as a `Double`, or `0.0` if the `key` is not in the dictionary.
-    func double(for  key: String) -> Double {
-        return self[key] as? Double ?? 0.0
+    /// - Parameter defaultValue: A default double value to return in case the key is not present in the dictionary. This defaults to `0.0`.
+    /// - Returns: The value associated with `key` as a `Double`, or the default double value if the `key` is not in the dictionary.
+    func double(for  key: String, defaultvalue: Double = 0.0) -> Double {
+        return self[key] as? Double ?? defaultvalue
     }
 }

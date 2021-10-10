@@ -32,7 +32,7 @@ public extension BinaryInteger {
     }
     /// Returns the string representation of the integer.
     var string: String {
-        return "\(self)"
+        return String(self)
     }
     /// Returns `true` if the integer is zero.
     var isZero: Bool {
@@ -40,7 +40,7 @@ public extension BinaryInteger {
     }
     /// Returns `true` if the integer is **not** zero.
     var isNotZero: Bool {
-        return !isZero
+        return isZero == false
     }
     /// Returns `true` if the integer is less than zero.
     var isNegative: Bool {
@@ -52,7 +52,7 @@ public extension BinaryInteger {
     }
     /// Returns `true`, if the integer is an odd number.
     var isOdd: Bool {
-        return !isEven
+        return isEven == false
     }
     
     /// Returns the integer clamped to the given lower and upper bounds.
@@ -87,7 +87,7 @@ public extension BinaryFloatingPoint {
     }
     /// Returns `true` if the binary floating point is **not** zero.
     var isNotZero: Bool {
-        return !isZero
+        return isZero == false
     }
     /// Returns `true` if the binary floating point is less than zero.
     var isNegative: Bool {

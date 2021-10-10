@@ -9,12 +9,20 @@
 import Foundation
 
 public extension Sequence {
+    /// Returns the elements of the sequence, sorted by the given key path and using a predicate for that key path as the comparison between elements.
+    /// - Parameters:
+    ///   - keyPath: The key path of the property to sort on.
+    ///   - areInIncreasingOrder: A predicate that returns `true` if its first argument should be ordered before its second argument; otherwise, `false`.
+    /// - Returns: A sorted array of the sequence's elements.
     func sorted<Value>(by keyPath: KeyPath<Element, Value>, using areInIncreasingOrder: (Value, Value) throws -> Bool) rethrows -> [Element] {
         try self.sorted {
             try areInIncreasingOrder($0[keyPath: keyPath], $1[keyPath: keyPath])
         }
     }
     
+    /// Returns the elements of the sequence, sorted using by the given key path in ascending order, when the key path's value conforms to the ``Comparable`` protocol.
+    ///   - keyPath: The key path of the property to sort on.
+    /// - Returns: A sorted array of the sequence's elements.
     func sorted<Value: Comparable>(by keyPath: KeyPath<Element, Value>) -> [Element] {
         self.sorted(by: keyPath, using: <)
     }
@@ -47,7 +55,7 @@ public extension Sequence {
     
     func filter(unless allCondition: Bool, isIncluded: (Element) throws -> Bool) rethrows -> [Element] {
         try self.filter {
-            guard !allCondition else { return true }
+            guard allCondition == false else { return true }
             
             return try isIncluded($0)
         }
