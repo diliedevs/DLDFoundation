@@ -45,35 +45,35 @@ public extension Date {
     }
     /// The year of the date object.
     var year: Int {
-        return components.year ?? 0
+        return component(.year)
     }
     /// The month of the date object.
     var month: Int {
-        return components.month ?? 0
+        return component(.month)
     }
     /// The day of the date object.
     var day: Int {
-        return components.day ?? 0
+        return component(.day)
     }
     /// The hour of the date object.
     var hour: Int {
-        return components.hour ?? 0
+        return component(.hour)
     }
     /// The minute of the date object.
     var minute: Int {
-        return components.minute ?? 0
+        return component(.minute)
     }
     /// The second of the date object.
     var second: Int {
-        return components.second ?? 0
+        return component(.second)
     }
     /// The weekday of the date object.
     var weekday: Int {
-        return components.weekday ?? 0
+        return component(.weekday)
     }
     /// The week of the date object.
     var week: Int {
-        return components.weekOfYear ?? 0
+        return component(.weekOfYear)
     }
     /// The number of days in the month of the date object.
     var daysInMonth: Int {
@@ -96,6 +96,12 @@ public extension Date {
     /// The date as an `NSDate` object.
     var ns: NSDate {
         return self as NSDate
+    }
+}
+
+fileprivate extension Date {
+    func component(_ comp: Calendar.Component) -> Int {
+        curCal.component(comp, from: self)
     }
 }
 
