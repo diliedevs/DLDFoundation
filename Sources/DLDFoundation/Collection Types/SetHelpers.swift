@@ -22,9 +22,11 @@ public extension Array where Element: Hashable {
     }
 }
 
-public extension NSSet {
-    /// Returns an array of all the elements in the `NSSet`.
-    var elements: [Element] {
-        return allObjects as [Element]
+public extension Optional where Wrapped == NSSet {
+    /// Returns an array of all the elements in the optional `NSSet` as the given type or an empty array.
+    func asArray<T>(of type: T.Type) -> [T] {
+        guard let theSet = self else { return [] }
+        
+        return theSet.allObjects as? [T] ?? []
     }
 }

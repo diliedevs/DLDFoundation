@@ -17,18 +17,6 @@ public extension String {
     var range: Range<String.Index> {
         return range(of: self)!
     }
-    /// Returns an uppercase representation of the string.
-    var uppered: String {
-        return uppercased()
-    }
-    /// Returns a lowercase representation of the string.
-    var lowered: String {
-        return lowercased()
-    }
-    /// Returns the string with only the first letter capitalized, like a sentence.
-    var sentenced: String {
-        return sentenceCased()
-    }
     /// Returns a new string made by removing from both ends of the string characters contained in the whitespace character set (`space` and `tab`).
     var trimmed: String {
         return trimmingCharacters(in: .whitespaces)
@@ -47,6 +35,11 @@ public extension String {
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         
         return emailTest.evaluate(with: self)
+    }
+    /// Returns the number of words in the receiving string.
+    var wordCount: Int {
+        let regex = try? NSRegularExpression(pattern: "\\w+")
+        return regex?.numberOfMatches(in: self, range: NSRange(location: 0, length: self.utf16.count)) ?? 0
     }
     
     // MARK: - Modifying Strings
@@ -105,21 +98,33 @@ public extension String {
     /// Returns a new string by prepending the given prefix to the receiver.
     /// - Parameter prefix: The prefix to prepend.
     func prefix(with prefix: String) -> String {
-        guard !hasPrefix(prefix) else { return self }
+        guard hasPrefix(prefix) == false else { return self }
         return prefix + self
     }
     
     /// Returns a new string by appending the given suffix to the receiver.
     /// - Parameter suffix: The suffix to append.
     func suffix(with suffix: String) -> String {
-        guard !hasSuffix(suffix) else { return self }
+        guard hasSuffix(suffix) == false else { return self }
         return self + suffix
     }
     
-    private func sentenceCased() -> String {
-        guard isNotEmpty, let first = first else { return self }
+    func truncate(to length: Int, addEllipsis: Bool = false) -> String  {
+        if length > count { return self }
         
-        return String(first).uppered + self.dropFirst()
+        let endPosition = self.index(self.startIndex, offsetBy: length)
+        let trimmed = self[..<endPosition]
+        
+        if addEllipsis {
+            return "\(trimmed)…"
+        } else {
+            return String(trimmed)
+        }
+    }
+    
+    /// Returns the string with only the first letter capitalized, like a sentence.
+    func sentenceCased() -> String {
+        return prefix(1).capitalized + dropFirst()
     }
 }
 

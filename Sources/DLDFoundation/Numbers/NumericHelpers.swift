@@ -30,10 +30,6 @@ public extension BinaryInteger {
     var bool: Bool {
         return self == 1
     }
-    /// Returns the string representation of the integer.
-    var string: String {
-        return String(self)
-    }
     /// Returns `true` if the integer is zero.
     var isZero: Bool {
         return self == .zero
@@ -54,14 +50,6 @@ public extension BinaryInteger {
     var isOdd: Bool {
         return isEven == false
     }
-    
-    /// Returns the integer clamped to the given lower and upper bounds.
-    /// - Parameters:
-    ///   - start: The lowest value the integer can have.
-    ///   - end: The highest value the integer can have.
-    func clamped(from start: Self, to end: Self) -> Self {
-        self < start ? start : self > end ? end : self
-    }
 }
 
 public extension BinaryFloatingPoint {
@@ -81,10 +69,6 @@ public extension BinaryFloatingPoint {
     var cgfloat: CGFloat {
         return CGFloat(self)
     }
-    /// Returns the string representation of the binary floating point.
-    var string: String {
-        return "\(self)"
-    }
     /// Returns `true` if the binary floating point is **not** zero.
     var isNotZero: Bool {
         return isZero == false
@@ -101,14 +85,6 @@ public extension BinaryFloatingPoint {
         let doubleResult = Darwin.round(self.double * multiplier) / multiplier
         return Self(doubleResult)
     }
-    
-    /// Returns the binary floating point clamped to the given lower and upper bounds.
-    /// - Parameters:
-    ///   - start: The lowest value the binary floating point can have.
-    ///   - end: The highest value the binary floating point can have.
-    func clamped(from start: Self, to end: Self) -> Self {
-        self < start ? start : self > end ? end : self
-    }
 }
 
 public extension SignedNumeric {
@@ -117,6 +93,17 @@ public extension SignedNumeric {
         var nr = self
         nr.negate()
         return nr
+    }
+}
+
+public extension Numeric {
+    /// Returns the string representation of the numeric value.
+    var string: String {
+        "\(self)"
+    }
+    /// Returns the string representation of the numeric value in a spelled out style.
+    var spelledOut: String {
+        Numfo(style: .spellOut).string(for: self) ?? string
     }
 }
 

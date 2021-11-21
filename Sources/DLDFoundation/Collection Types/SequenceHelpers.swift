@@ -64,6 +64,10 @@ public extension Sequence {
     func grouped<Value: Comparable>(by keyPath: KeyPath<Element, Value>) -> [Value: [Element]] {
         Dictionary(grouping: self) { $0[keyPath: keyPath] }
     }
+    
+    func asArray() -> [Element] {
+        self.map { $0 }
+    }
 }
 
 public extension Sequence where Element: StringProtocol {
