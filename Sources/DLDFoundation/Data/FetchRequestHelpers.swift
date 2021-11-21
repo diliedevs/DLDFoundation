@@ -21,3 +21,9 @@ public extension NSFetchRequest {
         self.predicate = predicate
     }
 }
+
+public extension NSFetchedResultsController {
+    @objc convenience init(fetchRequest: NSFetchRequest<ResultType>, managedObjectContext context: NSManagedObjectContext) {
+        self.init(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+    }
+}

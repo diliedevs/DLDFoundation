@@ -54,6 +54,10 @@ public extension NSManagedObject {
         guard let count = try? context.count(for: Self.fetchRequest()) else { return 0 }
         return count
     }
+    
+    static func sampleTitle(for number: Int) -> String {
+        "\(entityName) \(number.spelledOut)"
+    }
 }
 
 public extension Sequence where Element: NSManagedObject {
