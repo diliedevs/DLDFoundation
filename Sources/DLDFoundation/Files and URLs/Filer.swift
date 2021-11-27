@@ -121,12 +121,12 @@ public class Filer : FileManager {
     
     // MARK: - Deleting Files and Folders
     /// Permanently removes, i.e. deletes, the file or directory at the specified URL from the system.
-    func removeFile(at url: URL) throws {
+    public func removeFile(at url: URL) throws {
         guard fileExists(at: url) else { return }
         try removeItem(at: url)
     }
     /// Moves the file or directory at the specified URL to the trash.
-    func trashFile(at url: URL) throws {
+    public func trashFile(at url: URL) throws {
         guard fileExists(at: url) else { return }
         try trashItem(at: url, resultingItemURL: nil)
     }
@@ -143,7 +143,7 @@ public class Filer : FileManager {
     ///   - directory: The URL of the directory to move the file or directory to.
     ///   - preferredName: The preferred name of the file or directory being moved. Defaults to the name the item has at the source URL.
     ///   - handleDestination: A block to perform on the new location URL after the file has been moved.
-    func moveFile(at srcURL: URL, to directory: URL, preferredName: String = "", then handleDestination: ((URL) -> Void) = { _ in }) throws {
+    public func moveFile(at srcURL: URL, to directory: URL, preferredName: String = "", then handleDestination: ((URL) -> Void) = { _ in }) throws {
         guard fileExists(at: srcURL) else { return }
         let destination = createDestination(with: directory, srcURL: srcURL, preferredName: preferredName)
         
@@ -157,7 +157,7 @@ public class Filer : FileManager {
     ///   - directory: The URL of the directory to copy the file or directory to.
     ///   - preferredName: The preferred name of the file or directory being copied. Defaults to the name the item has at the source URL.
     ///   - handleDestination: A block to perform on the new location URL after the file has been copied.
-    func copyFile(at srcURL: URL, to directory: URL, preferredName: String = "", then handleDestination: ((URL) -> Void) = { _ in }) throws {
+    public func copyFile(at srcURL: URL, to directory: URL, preferredName: String = "", then handleDestination: ((URL) -> Void) = { _ in }) throws {
         guard fileExists(at: srcURL) else { return }
         let destination = createDestination(with: directory, srcURL: srcURL, preferredName: preferredName)
         
