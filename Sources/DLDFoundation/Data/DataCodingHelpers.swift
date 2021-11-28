@@ -29,54 +29,21 @@ public extension PropertyListEncoder {
         }
     }
 }
-//
-//public extension DecodingError {
-//    var cause: String {
-//        switch self {
-//        case .keyNotFound(let key, _): return "missing key '\(key.stringValue)'"
-//        case .typeMismatch(let type, _): return "type mismatch of '\(type)'"
-//        case .valueNotFound(let type, _): return "missing \(type) value"
-//        case .dataCorrupted(_): return "invalid file format"
-//        case _: return localizedDescription
-//        }
-//    }
-//
-//    func message(using file: String) -> String {
-//        "Failed to decode \(file) due to \(cause)"
-//    }
-//}
-
-//public extension EncodingError {
-//    var cause: String {
-//        switch self {
-//        case .invalidValue(let value, _): return "invalid value of \(value)"
-//        case _: return localizedDescription
-//        }
-//    }
-//    
-//    func message(using file: String) -> String {
-//        "Failed to encode \(file) due to \(cause)"
-//    }
-//}
 
 public extension Data {
-    func jsonDecode<T: Decodable>(_ type: T.Type) throws -> T {
-        let decoder = JSONDecoder()
+    func jsonDecode<T: Decodable>(_ type: T.Type, using decoder: JSONDecoder) throws -> T {
+        try decoder.decode(type, from: self)
+    }
+    
+    func plistDecode<T: Decodable>(_ type: T.Type, using decoder: PropertyListDecoder) throws -> T {
         return try decoder.decode(type, from: self)
     }
     
-    func plistDecode<T: Decodable>(_ type: T.Type) throws -> T {
-        let decoder = PropertyListDecoder()
-        return try decoder.decode(type, from: self)
+    static func jsonEncoded<T: Encodable>(_ value: T, using encoder: JSONEncoder) throws -> Data {
+        try encoder.encode(value)
     }
     
-    static func jsonEncoded<T: Encodable>(_ value: T, prettyPrinted: Bool = true) throws -> Data {
-        let encoder = JSONEncoder(prettyPrinted: prettyPrinted)
-        return try encoder.encode(value)
-    }
-    
-    static func plistEncoded<T: Encodable>(_ value: T) throws -> Data {
-        let encoder = PropertyListEncoder(xmlFormat: true)
-        return try encoder.encode(value)
+    static func plistEncoded<T: Encodable>(_ value: T, using encoder: PropertyListEncoder) throws -> Data {
+        try encoder.encode(value)
     }
 }
