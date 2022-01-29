@@ -135,3 +135,18 @@ public extension URL {
         try contentsOfDirectory(deepEnumeration: true, relativeURLs: relativeURLs, includeHidden: includeHidden, includePackageContents: includePackageContents)
     }
 }
+
+public extension URLComponents {
+    init?(url: URL?, queryItems: [URLQueryItem]?) {
+        guard let url = url else { return nil }
+        
+        self.init(url: url, resolvingAgainstBaseURL: true)
+        self.queryItems = queryItems
+    }
+}
+
+extension URLQueryItem: Comparable {
+    public static func < (lhs: URLQueryItem, rhs: URLQueryItem) -> Bool {
+        lhs.name < rhs.name
+    }
+}

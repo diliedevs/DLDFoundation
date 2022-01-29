@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(macOS 12.0, iOS 15.0, *)
 public extension Date.ISO8601FormatStyle {
     /// Returns only the year, month, and day in ISO8601 format style, i.e. `2022-01-29`.
     func date() -> Self {
@@ -15,6 +16,7 @@ public extension Date.ISO8601FormatStyle {
     }
 }
 
+@available(macOS 12.0, iOS 15.0, *)
 public extension FloatingPointFormatStyle where Value: BinaryFloatingPoint {
     /// Returns the binary floating point value with the given length of fractional digits.
     /// - Parameter length: The number of digits after the decimal separator.
@@ -23,6 +25,7 @@ public extension FloatingPointFormatStyle where Value: BinaryFloatingPoint {
     }
 }
 
+@available(macOS 12.0, iOS 15.0, *)
 public extension FormatStyle where Self == FloatingPointFormatStyle<Double>.Currency {
     static func euros() -> Self {
         currency(code: "EUR")
