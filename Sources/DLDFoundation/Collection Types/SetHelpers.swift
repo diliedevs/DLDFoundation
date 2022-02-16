@@ -30,3 +30,12 @@ public extension Optional where Wrapped == NSSet {
         return theSet.allObjects as? [T] ?? []
     }
 }
+
+public extension SetAlgebra {
+    /// Toggles the given element of the set, by removing it if it is present in the set, or otherwise inserting it.
+    /// - Parameter element: The element of the set to toggle.
+    mutating func toggle(_ element: Element) {
+        if self.contains(element) { remove(element) }
+        else                      { insert(element) }
+    }
+}
