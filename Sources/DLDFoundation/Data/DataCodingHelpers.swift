@@ -31,11 +31,11 @@ public extension PropertyListEncoder {
 }
 
 public extension Data {
-    func jsonDecode<T: Decodable>(_ type: T.Type, using decoder: JSONDecoder) throws -> T {
+    func jsonDecode<T: Decodable>(_ type: T.Type = T.self, using decoder: JSONDecoder) throws -> T {
         try decoder.decode(type, from: self)
     }
     
-    func plistDecode<T: Decodable>(_ type: T.Type, using decoder: PropertyListDecoder) throws -> T {
+    func plistDecode<T: Decodable>(_ type: T.Type = T.self, using decoder: PropertyListDecoder) throws -> T {
         return try decoder.decode(type, from: self)
     }
     
