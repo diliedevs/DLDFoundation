@@ -78,29 +78,4 @@ public extension Date {
     init(hour: Int) {
         self.init(hour: hour, minute: 0, second: 0)
     }
-    
-    /// A `Date` object initialized from the specified string using the specified `DateFormatter`.
-    ///
-    /// - parameter string:    The string representing the date and/or time value.
-    /// - parameter formatter: The `DateFormatter` to use in converting the `string`.
-    ///
-    /// - returns: a `Date` object initialized from the specified string using the specified `DateFormatter` or the current date and time if the `string` could not be parsed into a `Date` object.
-    init(string: String, formatter: DateFormatter) {
-        guard let date = formatter.date(from: string) else {
-            self.init()
-            return
-        }
-        
-        self.init(components: date.components)
-    }
-    
-    /// A `Date` object initialized from the specified string using a `DateFormatter` with the specified `DateFormat`.
-    ///
-    /// - parameter string:    The string representing the date and/or time value.
-    /// - parameter dateFormat: The date format string to use in converting the `string`.
-    ///
-    /// - returns: a `Date` object initialized from the specified string using the specified `DateFormatter` or the current date and time if the `string` could not be parsed into a `Date` object.
-    init(string: String, dateFormat: DateFormat) {
-        self.init(string: string, formatter: DateFormatter(format: dateFormat))
-    }
 }

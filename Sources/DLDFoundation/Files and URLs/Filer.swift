@@ -101,17 +101,6 @@ public class Filer : FileManager {
         return url
     }
     
-    /// Creates a directory at the specified path, if it doesn’t already exist, and returns its full path.
-    ///
-    /// - parameter path: The path for the directory to be created.
-    ///
-    /// - returns: The full path for the desired directory.
-    @discardableResult public func createDirectory(at path: FilePath) throws -> String {
-        try createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
-        
-        return path.fullUserPath
-    }
-    
     /// Creates a directory with the specified name in the application support directory.
     /// - Parameter name: The name of the directory to create in the applicationi support directory.
     /// - Returns: A directory with the specified name in the application support directory.

@@ -33,10 +33,6 @@ public extension Date {
     static var thisYear: Int {
         return today.year
     }
-    /// A date value of 00:00:00 UTC on 1 January 1970.
-    static var unknown: Date {
-        Date(timeIntervalSince1970: 0)
-    }
     
     // MARK: - Getting Date Components
     /// All components of the `Date` object.
@@ -87,9 +83,18 @@ public extension Date {
             }
         }
     }
-    /// Returns `true` if the date value is 00:00:00 UTC on 1 January 1970.
-    var isUnknown: Bool {
-        self == .unknown
+    
+    /// Returns `true` if the date is in the distant past in terms of centuries.
+    var isDistantPast: Bool {
+        self == .distantPast
+    }
+    /// Returns `true` if the date is in the distant future in terms of centuries.
+    var isDistantFuture: Bool {
+        self == .distantFuture
+    }
+    /// Returns `true` if the date is in the distant past or future in terms of centuries.
+    var isDistant: Bool {
+        isDistantPast || isDistantFuture
     }
     
     // MARK: - Converting to NSDate

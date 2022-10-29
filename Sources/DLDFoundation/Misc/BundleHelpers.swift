@@ -11,15 +11,19 @@ import Foundation
 public extension Bundle {
     
     // MARK: - Bundle Information
-    /// The name of the application.
+    /// The short name for the bundle, usually the name of the application.
     var name: String {
         return string(forKey: .name)
     }
-    /// The current version of the application.
+    /// The localized version of the application name.
+    var displayName: String {
+        return string(forKey: .displayName)
+    }
+    /// The release version of the application.
     var version: String {
         return string(forKey: .releaseVersion)
     }
-    /// The build number as a string of the application.
+    /// The build version number of the bundle.
     var build: String {
         return string(forKey: .buildVersion)
     }

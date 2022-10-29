@@ -13,22 +13,32 @@ public extension URL {
     // MARK: - Getting System Directory URLs
     /// Returns the URL for the home directory of the current user.
     static var home: URL {
-        return URL(filePath: FilePath.home)
+        if #available(macOS 13.0, iOS 16.0, *) { return .homeDirectory }
+        
+        return URL(fileURLWithPath: NSHomeDirectory())
     }
     /// Returns the URL for the desktop directory of the current user.
     static var desktop: URL {
+        if #available(macOS 13.0, iOS 16.0, *) { return .desktopDirectory }
+        
         return Filer.shared.userURL(for: .desktopDirectory)
     }
     /// Returns the URL for the documents directory of the current user.
     static var documents: URL {
+        if #available(macOS 13.0, iOS 16.0, *) { return .documentsDirectory }
+        
         return Filer.shared.userURL(for: .documentDirectory)
     }
     /// Returns the URL for the downloads directory of the current user.
     static var downloads: URL {
+        if #available(macOS 13.0, iOS 16.0, *) { return .downloadsDirectory }
+        
         return Filer.shared.userURL(for: .downloadsDirectory)
     }
     /// Returns the URL for the application support directory for all applications of the current user.
     static var appSupport: URL {
+        if #available(macOS 13.0, iOS 16.0, *) { return .applicationSupportDirectory }
+        
         return Filer.shared.userURL(for: .applicationSupportDirectory)
     }
     /// Returns the URL for the application support directory for the application of the current user.
@@ -40,16 +50,24 @@ public extension URL {
     }
     /// Returns the URL for the local trash directory.
     static var trash: URL {
+        if #available(macOS 13.0, iOS 16.0, *) { return .trashDirectory }
+        
         return Filer.shared.localURL(for: .trashDirectory)
     }
     /// Returns the URL for the local applications directory.
     static var applications: URL {
+        if #available(macOS 13.0, iOS 16.0, *) { return .applicationDirectory }
+        
         return Filer.shared.localURL(for: .applicationDirectory)
+    }
+    /// Returns the URL for the temporary directory.
+    static var temp: URL {
+        if #available(macOS 13.0, iOS 16.0, *) { return .temporaryDirectory }
+        
+        return Filer.shared.temporaryDirectory
     }
     
     // MARK: - URL Properties
-    //******************************************************************************************************//
-    
     /// Returns `true` if the URL path represents a directory.
     var isDirectory: Bool {
         return hasDirectoryPath
@@ -79,12 +97,6 @@ public extension URL {
     }
     
     // MARK: - Creating URLs
-    /// Creates a file URL with the specified path.
-    /// - Parameter filePath: The path to the file for which to create a URL.
-    init(filePath: FilePath) {
-        self.init(fileURLWithPath: filePath.fullUserPath)
-    }
-    
     /// Returns a new URL by appending the string to the right of the plus sign to the url on the left.
     /// - Parameters:
     ///   - lhs: The URL to append the string path component to.
