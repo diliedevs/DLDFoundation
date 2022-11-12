@@ -9,10 +9,6 @@
 import Foundation
 
 public extension String {
-    /// Returns the number of Unicode characters in the string.
-    var length: Int {
-        return count
-    }
     /// Returns the range of the entire string.
     var range: Range<String.Index> {
         return range(of: self)!
@@ -40,6 +36,11 @@ public extension String {
     var wordCount: Int {
         let regex = try? NSRegularExpression(pattern: "\\w+")
         return regex?.numberOfMatches(in: self, range: NSRange(location: 0, length: self.utf16.count)) ?? 0
+    }
+    
+    /// Returns `true` if the string is a word of at least 2 letters.
+    var isWord: Bool {
+        wordCount > 0 && count > 1
     }
     
     // MARK: - Modifying Strings
@@ -125,6 +126,24 @@ public extension String {
     /// Returns the string with only the first letter capitalized, like a sentence.
     func sentenceCased() -> String {
         return prefix(1).capitalized + dropFirst()
+    }
+    
+    /// Returns a Base-64 encoded string.
+    func baseEncoded() -> String {
+        Data(self.utf8).base64EncodedString()
+    }
+    
+    /// Tries decoding the Base-64 encoded string and returns the Unicode string value.
+    func baseDecoded() -> String? {
+        guard let data = Data(base64Encoded: self) else { return nil }
+        
+        return String(data: data, encoding: .utf8)
+    }
+    
+    /// Returns a Boolean value indicating whether the given string is non-empty and contained within this string by case-insensitive, non-literal search, taking into account the current locale.
+    /// - Parameter searchText: The string to search for.
+    func hasSearchText(_ searchText: String) -> Bool {
+        self.localizedCaseInsensitiveContains(searchText)
     }
 }
 

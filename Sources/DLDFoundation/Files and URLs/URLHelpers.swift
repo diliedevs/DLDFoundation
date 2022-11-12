@@ -68,6 +68,11 @@ public extension URL {
     }
     
     // MARK: - URL Properties
+    var cleanPath: String {
+        if #available(macOS 13.0, iOS 16.0, *) { return path(percentEncoded: false) }
+        
+        return path
+    }
     /// Returns `true` if the URL path represents a directory.
     var isDirectory: Bool {
         return hasDirectoryPath
@@ -154,11 +159,5 @@ public extension URLComponents {
         
         self.init(url: url, resolvingAgainstBaseURL: true)
         self.queryItems = queryItems
-    }
-}
-
-extension URLQueryItem: Comparable {
-    public static func < (lhs: URLQueryItem, rhs: URLQueryItem) -> Bool {
-        lhs.name < rhs.name
     }
 }

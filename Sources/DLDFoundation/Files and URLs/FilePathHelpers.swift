@@ -43,3 +43,9 @@ public extension FilePath {
         stem
     }
 }
+
+@available(macOS 13.0, iOS 16.0, *)
+public extension URL {
+    /// Returns the file path of the URL.
+    var filePath: FilePath { FilePath(cleanPath) }
+}

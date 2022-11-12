@@ -61,12 +61,6 @@ public extension Bundle {
     func urlForFile(_ filename: String, inDirectory directory: String? = nil) -> URL? {
         url(forResource: filename, withExtension: nil, subdirectory: directory)
     }
-    
-    func contentsOfFile(_ filename: String, inDirectory directory: String? = nil) -> String? {
-        guard let url = urlForFile(filename, inDirectory: directory) else { return nil }
-        
-        return try? String(contentsOf: url)
-    }
 }
 
 /// The following constants specify the keys in a bundle's `Info.plist`.

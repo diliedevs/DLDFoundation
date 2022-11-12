@@ -11,11 +11,16 @@ import Foundation
 public extension JSONEncoder {
     /// Creates a new, reusable JSON encoder with the default encoding strategies and a pretty printed formatting if so specified.
     /// - Parameter prettyPrinted: Set to `true` if the output formatting should use ample white space and indentation to make output easy to read.
-    convenience init(prettyPrinted: Bool) {
+    /// - Parameter withoutEscapingSlashes: Set to `true` if the output formatting should **not** prefix slash characters with escape characters.
+    /// - Parameter sortedKeys: Set to `true` if the output formatting should sort keys in lexicographic order.
+    convenience init(prettyPrinted: Bool, withoutEscapingSlashes: Bool = false, sortedKeys: Bool = false) {
+        var outputFormatting = OutputFormatting()
+        if prettyPrinted          { outputFormatting.update(with: .prettyPrinted) }
+        if withoutEscapingSlashes { outputFormatting.update(with: .withoutEscapingSlashes) }
+        if sortedKeys             { outputFormatting.update(with: .sortedKeys) }
+        
         self.init()
-        if prettyPrinted {
-            self.outputFormatting = .prettyPrinted
-        }
+        self.outputFormatting = outputFormatting
     }
 }
 

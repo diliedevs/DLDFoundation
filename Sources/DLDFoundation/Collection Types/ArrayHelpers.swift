@@ -31,6 +31,7 @@ public extension Array {
         replaceSubrange(index...index, with: [newElement])
     }
     
+    
     // MARK: - Iterating Over an Array's Elements
     /// Passes through each element with their index in the array and performs the specified code block on them.
     ///
@@ -50,4 +51,31 @@ public extension Array where Element: Hashable {
     func uniqued() -> [Element] {
         return Array(Set(self))
     }
+    
+    // MARK: - Adding and Removing Elements
+    /// Only adds the given element to the array if it is not yet present.
+    /// - Parameter element: The element to add to the array.
+    mutating func addMissing(_ element: Element) {
+        if contains(element) == false {
+            append(element)
+        }
+    }
+    /// Removes all instances of the given element.
+    /// - Parameter element: The element to remove from the array.
+    mutating func remove(_ element: Element) {
+        removeAll { $0 == element }
+    }
+}
+
+public extension Array where Element: Identifiable {
+    subscript(id: Element.ID, defaultElement: Element) -> Element {
+        get {
+            first(where: { $0.id == id }) ?? defaultElement
+        }
+        set(newValue) {
+            if let idx = firstIndex(where: { $0.id == newValue.id }) {
+                self[idx] = newValue
+            }
+        }
+    } 
 }
