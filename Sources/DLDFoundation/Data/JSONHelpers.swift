@@ -50,3 +50,25 @@ public extension Data {
         try encoder.encode(value)
     }
 }
+
+public extension UserDefaults {
+    func codable<T: Codable>(forKey key: String, decoder: JSONDecoder = JSONDecoder()) -> T? {
+        guard let data = self.data(forKey: key) else { return nil }
+        
+        do {
+            return try data.decodeJSON(using: decoder)
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
+    func set<T: Codable>(_ codable: T, forKey key: String, encoder: JSONEncoder = JSONEncoder(prettyPrinted: true)) {
+        do {
+            let data = try encoder.encode(codable)
+            self.set(data, forKey: key)
+        } catch {
+            print(error)
+        }
+    }
+}
