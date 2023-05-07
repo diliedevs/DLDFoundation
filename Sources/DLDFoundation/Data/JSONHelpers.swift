@@ -38,7 +38,7 @@ public extension Data {
     /// - Parameters:
     ///   - type: The type of the value to decode from the supplied data of the JSON object.
     ///   - decoder: The JSON decoder to use to decode the JSON object.
-    func decodeJSON<T: Decodable>(_ type: T.Type = T.self, using decoder: JSONDecoder) throws -> T {
+    func decodeJSON<T: Decodable>(_ type: T.Type = T.self, using decoder: JSONDecoder = JSONDecoder()) throws -> T {
         try decoder.decode(type, from: self)
     }
     
@@ -46,7 +46,7 @@ public extension Data {
     /// - Parameters:
     ///   - value: The value to encode as JSON.
     ///   - encoder: The JSON encoder to use to encode the supplied value.
-    static func encodedJSON<T: Encodable>(_ value: T, using encoder: JSONEncoder) throws -> Data {
+    static func encodedJSON<T: Encodable>(_ value: T, using encoder: JSONEncoder = JSONEncoder(prettyPrinted: true)) throws -> Data {
         try encoder.encode(value)
     }
 }
