@@ -42,6 +42,11 @@ public struct File: FileNode {
         let wrap = FileWrapper(regularFileWithContents: Data(content.utf8))
         return create(from: wrap)
     }
+    
+    public init(name: String, content: String) {
+        self.name = name
+        self.content = content
+    }
 }
 
 @available(macOS 13.0, iOS 16.0, *)
@@ -55,5 +60,10 @@ public struct Folder: FileNode {
         }
         let wrap = FileWrapper(directoryWithFileWrappers: kids)
         return create(from: wrap)
+    }
+    
+    public init(name: String, children: [FileNode]) {
+        self.name = name
+        self.children = children
     }
 }
