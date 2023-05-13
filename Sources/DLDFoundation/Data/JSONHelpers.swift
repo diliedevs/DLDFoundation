@@ -51,6 +51,27 @@ public extension Data {
     }
 }
 
+/// A type that can convert itself into JSON data or a JSON string.
+public protocol JSONConvertible {
+    /// The encoder to use for encoding the object into JSON data.
+    var jsonEncoder : JSONEncoder { get set }
+    /// The data for the encoded JSON object.
+    var jsonData    : Data        { get }
+    /// The string representation of the JSON data.
+    var json        : String      { get }
+}
+
+public extension JSONConvertible where Self: Codable {
+    /// Returns the codable object as JSON data.
+    var jsonData: Data {
+        (try? jsonEncoder.encode(self)) ?? Data()
+    }
+    /// Returns the json string representation of the codable object.
+    var json: String {
+        String(decoding: jsonData, as: UTF8.self)
+    }
+}
+
 public extension UserDefaults {
     func codable<T: Codable>(forKey key: String, decoder: JSONDecoder = JSONDecoder()) -> T? {
         guard let data = self.data(forKey: key) else { return nil }

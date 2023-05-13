@@ -83,6 +83,23 @@ public extension Sequence where Element: Numeric {
     }
 }
 
+public protocol OptionalProtocal {
+    associatedtype Wrapped
+    var optional: Wrapped? { get }
+}
+
+extension Optional: OptionalProtocal {
+    public var optional: Wrapped? {
+        return self
+    }
+}
+
+public extension Sequence where Element: OptionalProtocal {
+    func removingNils() -> [Element.Wrapped] {
+        self.compactMap { $0.optional }
+    }
+}
+
 public extension Collection {
     /// A Boolean value indicating whether the collection is not empty.
     var isNotEmpty: Bool {

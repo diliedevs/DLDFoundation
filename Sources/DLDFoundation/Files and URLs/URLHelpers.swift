@@ -153,6 +153,17 @@ public extension URL {
     }
 }
 
+@available(macOS 13.0, iOS 16.0, *)
+public extension URL {
+    init(base: String, endpoint: String, queryItems: [URLQueryItem] = []) {
+        self.init(string: base)!
+        self.append(component: endpoint)
+        if queryItems.isNotEmpty {
+            self.append(queryItems: queryItems)
+        }
+    }
+}
+
 public extension URLComponents {
     init?(url: URL?, queryItems: [URLQueryItem]?) {
         guard let url = url else { return nil }

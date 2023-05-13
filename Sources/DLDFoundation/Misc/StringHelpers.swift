@@ -25,6 +25,8 @@ public extension String {
     var ns: NSString {
         return NSString(string: self)
     }
+    /// Returns the receiving string surrounded by double quotes, i.e. `"string"`.
+    var quoted: String { "\"\(self)\"" }
     /// Returns `true` if the string is a valid email address.
     var isEmail: Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
