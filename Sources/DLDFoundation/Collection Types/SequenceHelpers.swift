@@ -83,18 +83,18 @@ public extension Sequence where Element: Numeric {
     }
 }
 
-public protocol OptionalProtocal {
+public protocol OptionalType {
     associatedtype Wrapped
     var optional: Wrapped? { get }
 }
 
-extension Optional: OptionalProtocal {
+extension Optional: OptionalType {
     public var optional: Wrapped? {
         return self
     }
 }
 
-public extension Sequence where Element: OptionalProtocal {
+public extension Sequence where Element: OptionalType {
     func removingNils() -> [Element.Wrapped] {
         self.compactMap { $0.optional }
     }

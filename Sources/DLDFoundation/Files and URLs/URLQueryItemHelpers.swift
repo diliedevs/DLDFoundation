@@ -27,7 +27,8 @@ public extension Dictionary where Key == String, Value: LosslessStringConvertibl
     }
 }
 
-public extension Dictionary where Key == String, Value == Optional<LosslessStringConvertible> {
+
+public extension Dictionary where Key == String, Value: OptionalType, Value.Wrapped: LosslessStringConvertible {
     func toURLQueryItems() -> [URLQueryItem] {
         self.compactMapValues({ $0 }).toURLQueryItems()
     }
