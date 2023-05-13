@@ -62,6 +62,11 @@ public protocol JSONConvertible {
 }
 
 public extension JSONConvertible where Self: Codable {
+    /// Gets the jsonEncoder, and sets it to the basic JSONEncoder with pretty printing by default.
+    var jsonEncoder : JSONEncoder {
+        get { jsonEncoder }
+        set { jsonEncoder = JSONEncoder(prettyPrinted: true) }
+    }
     /// Returns the codable object as JSON data.
     var jsonData: Data {
         (try? jsonEncoder.encode(self)) ?? Data()
