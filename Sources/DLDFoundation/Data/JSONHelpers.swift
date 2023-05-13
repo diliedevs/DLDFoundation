@@ -9,7 +9,7 @@
 import Foundation
 
 public extension JSONEncoder {
-    /// Creates a new, reusable JSON encoder with the default encoding strategies and a pretty printed formatting if so specified.
+    /// Creates a new, reusable JSON encoder with the default encoding strategies and pretty printed formatting if so specified.
     /// - Parameter prettyPrinted: Set to `true` if the output formatting should use ample white space and indentation to make output easy to read.
     /// - Parameter withoutEscapingSlashes: Set to `true` if the output formatting should **not** prefix slash characters with escape characters.
     /// - Parameter sortedKeys: Set to `true` if the output formatting should sort keys in lexicographic order.
@@ -21,6 +21,11 @@ public extension JSONEncoder {
         
         self.init()
         self.outputFormatting = outputFormatting
+    }
+    
+    /// Returns a new, reusable JSON encoder with the default encoding strategies and pretty printed formatting.
+    static var prettyPrinting: JSONEncoder {
+        JSONEncoder(prettyPrinted: true)
     }
 }
 
@@ -46,7 +51,7 @@ public extension Data {
     /// - Parameters:
     ///   - value: The value to encode as JSON.
     ///   - encoder: The JSON encoder to use to encode the supplied value.
-    static func encodedJSON<T: Encodable>(_ value: T, using encoder: JSONEncoder = JSONEncoder(prettyPrinted: true)) throws -> Data {
+    static func encodedJSON<T: Encodable>(_ value: T, using encoder: JSONEncoder = .prettyPrinting) throws -> Data {
         try encoder.encode(value)
     }
 }
@@ -54,7 +59,7 @@ public extension Data {
 /// A type that can convert itself into JSON data or a JSON string.
 public protocol JSONConvertible {
     /// The encoder to use for encoding the object into JSON data.
-    var jsonEncoder : JSONEncoder { get set }
+    var jsonEncoder : JSONEncoder { get }
     /// The data for the encoded JSON object.
     var jsonData    : Data        { get }
     /// The string representation of the JSON data.
@@ -64,8 +69,7 @@ public protocol JSONConvertible {
 public extension JSONConvertible where Self: Codable {
     /// Gets the jsonEncoder, and sets it to the basic JSONEncoder with pretty printing by default.
     var jsonEncoder : JSONEncoder {
-        get { jsonEncoder }
-        set { jsonEncoder = JSONEncoder(prettyPrinted: true) }
+        get { .prettyPrinting }
     }
     /// Returns the codable object as JSON data.
     var jsonData: Data {
