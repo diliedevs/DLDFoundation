@@ -9,11 +9,6 @@
 import Foundation
 
 public extension Array {
-    // MARK: - Converting to NSArray
-    /// An NSArray object representing the array.
-    var nsArray: NSArray {
-        return NSArray(array: self)
-    }
     
     // MARK: - Adding Elements
     /// Inserts a new element at the beginning of the array.

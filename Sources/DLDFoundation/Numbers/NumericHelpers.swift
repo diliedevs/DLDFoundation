@@ -50,10 +50,6 @@ public extension BinaryInteger {
     var isOdd: Bool {
         return isEven == false
     }
-    /// Returns the string representation of the numeric value in a spelled out style.
-    var spelledOut: String {
-        NumberFormatter.localizedString(from: NSNumber(value: Int(self)), number: .spellOut)
-    }
 }
 
 public extension BinaryFloatingPoint {
@@ -80,10 +76,6 @@ public extension BinaryFloatingPoint {
     /// Returns `true` if the binary floating point is less than zero.
     var isNegative: Bool {
         return self < .zero
-    }
-    /// Returns the string representation of the numeric value in a spelled out style.
-    var spelledOut: String {
-        NumberFormatter.localizedString(from: NSNumber(value: Double(self)), number: .spellOut)
     }
     
     /// Returns the binary floating point value rounded to the specified number of decimal digits.

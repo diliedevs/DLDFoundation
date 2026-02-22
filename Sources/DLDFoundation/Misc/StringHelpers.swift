@@ -24,11 +24,6 @@ public extension String {
     var lineTrimmed: String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
     }
-
-    /// Returns an `NSString` object initialized by copying the characters from the string.
-    var ns: NSString {
-        return NSString(string: self)
-    }
     
     /// Returns the receiving string surrounded by double quotes, i.e. `"string"`.
     var quoted: String {
@@ -37,16 +32,17 @@ public extension String {
     
     /// Returns `true` if the string is a valid email address.
     var isEmail: Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        
-        return emailTest.evaluate(with: self)
+        // Trim whitespace/newlines and validate the entire string with Swift Regex.
+        let s = self.trimmingCharacters(in: .whitespacesAndNewlines)
+        let pattern = /[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}/
+        return s.wholeMatch(of: pattern) != nil
     }
     
     /// Returns the number of words in the receiving string.
     var wordCount: Int {
-        let regex = try? NSRegularExpression(pattern: "\\w+")
-        return regex?.numberOfMatches(in: self, range: NSRange(location: 0, length: self.utf16.count)) ?? 0
+        // Count word-like sequences using Swift Regex (\w matches letters, digits, and underscore)
+        let pattern = /\w+/
+        return self.matches(of: pattern).count
     }
     
     /// Returns `true` if the string is a word of at least 2 letters.
@@ -370,12 +366,5 @@ public extension String {
     /// ```
     func capitalCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
         capitalCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
-    }
-}
-
-public extension NSString {
-    /// Returns the range of the entire string.
-    var range: NSRange {
-        return range(of: self as String)
     }
 }
