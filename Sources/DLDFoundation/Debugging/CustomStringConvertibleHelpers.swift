@@ -27,7 +27,7 @@ public extension CustomStringConvertible {
     /// Returns a textual representation of this instance, suitable for debugging.
     var debugDescription: String {
         let objName = type(of: self)
-        let address = Unmanaged.passRetained(self as AnyObject).toOpaque()
+        let address = Unmanaged.passUnretained(self as AnyObject).toOpaque()
         let mirror = Mirror(reflecting: self)
         let props = mirror.properties.map { "\t\($0.description)\n" }
         

@@ -17,7 +17,7 @@ public extension Date {
     ///
     /// - returns: A `Date` object initialized with the specified `DateComponents` object or the current date and time if the components could not be converted into a `Date` object.
     init(components: DateComponents) {
-        if let date = curCal.date(from: components) {
+        if let date = Calendar.autoupdatingCurrent.date(from: components) {
             self = date
         } else {
             self.init()

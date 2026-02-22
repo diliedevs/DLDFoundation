@@ -1,0 +1,15 @@
+{
+  "originHash" : "7ce68bbad73d445602d90653289e17a8bff880ebdddb30c036becbfe00f9026d",
+  "pins" : [
+    {
+      "identity" : "caseanything",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mesqueeb/CaseAnything.git",
+      "state" : {
+        "revision" : "705f90ad63884871a264009a0544001d63134461",
+        "version" : "0.1.8"
+      }
+    }
+  ],
+  "version" : 3
+}

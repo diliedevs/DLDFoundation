@@ -7,26 +7,34 @@
 //
 
 import Foundation
+import CaseAnything
 
 public extension String {
     /// Returns the range of the entire string.
     var range: Range<String.Index> {
         return range(of: self)!
     }
+    
     /// Returns a new string made by removing from both ends of the string characters contained in the whitespace character set (`space` and `tab`).
     var trimmed: String {
         return trimmingCharacters(in: .whitespaces)
     }
+    
     /// Returns a new string made by removing from both ends of the string characters contained in the whitespace and newline character set (`space` and `tab` and newline characters).
     var lineTrimmed: String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
     }
+
     /// Returns an `NSString` object initialized by copying the characters from the string.
     var ns: NSString {
         return NSString(string: self)
     }
+    
     /// Returns the receiving string surrounded by double quotes, i.e. `"string"`.
-    var quoted: String { "\"\(self)\"" }
+    var quoted: String {
+        "\"\(self)\""
+    }
+    
     /// Returns `true` if the string is a valid email address.
     var isEmail: Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
@@ -34,6 +42,7 @@ public extension String {
         
         return emailTest.evaluate(with: self)
     }
+    
     /// Returns the number of words in the receiving string.
     var wordCount: Int {
         let regex = try? NSRegularExpression(pattern: "\\w+")
@@ -55,7 +64,7 @@ public extension String {
     func replacing(_ target: String, with replacement: String) -> String {
         return replacingOccurrences(of: target, with: replacement)
     }
-    
+
     /// Returns a new string in which all occurrences of the specified target string have been removed, i.e. replaced with an empty string.
     ///
     /// - Parameter target: The substring to remove.
@@ -159,7 +168,7 @@ public extension String {
         /// Does nothing to the receiving string, leaving it as is.
         case none
     }
-    
+
     /// Returns the receiving string with a space according to the given placement.
     /// - Parameter placement: The location of where the space should be placed.
     /// - Returns: A new string with a space at the specified location.
@@ -167,8 +176,200 @@ public extension String {
         switch placement {
         case .before : return prefix(with: " ")
         case .after  : return suffix(with: " ")
-        case.none    : return self
+        case .none   : return self
         }
+    }
+
+    /// Converts the string to camelCase.
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The camelCased representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "hello world".camelCased() // "helloWorld"
+    /// "user ID".camelCased(keep: ["ID"]) // "userID"
+    /// ```
+    func camelCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        camelCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
+    }
+    
+    /// Converts the string to PascalCase (UpperCamelCase).
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The PascalCased representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "hello world".pascalCased() // "HelloWorld"
+    /// "user ID".pascalCased(keep: ["ID"]) // "UserID"
+    /// ```
+    func pascalCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        pascalCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
+    }
+    
+    /// Converts the string to kebab-case.
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The kebab-cased representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "Hello world".kebabCased() // "hello-world"
+    /// "API response code".kebabCased(keep: ["API"]) // "API-response-code"
+    /// ```
+    func kebabCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        kebabCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
+    }
+    
+    /// Converts the string to snake_case.
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The snake_cased representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "Hello world".snakeCased() // "hello_world"
+    /// "user ID".snakeCased(keep: ["ID"]) // "user_ID"
+    /// ```
+    func snakeCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        snakeCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
+    }
+    
+    /// Converts the string to CONSTANT_CASE (uppercase snake case).
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The CONSTANT_CASE representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "max value".constantCased() // "MAX_VALUE"
+    /// "user ID".constantCased(keep: ["ID"]) // "USER_ID"
+    /// ```
+    func constantCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        constantCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
+    }
+    
+    /// Converts the string to Train-Case (title-cased words separated by hyphens).
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The Train-Cased representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "hello world".trainCased() // "Hello-World"
+    /// "api version".trainCased(keep: ["API"]) // "API-Version"
+    /// ```
+    func trainCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        trainCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
+    }
+    
+    /// Converts the string to Ada_Case (title-cased words separated by underscores).
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The Ada_Cased representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "hello world".adaCased() // "Hello_World"
+    /// "api version".adaCased(keep: ["API"]) // "API_Version"
+    /// ```
+    func adaCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        adaCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
+    }
+    
+    /// Converts the string to COBOL-CASE (uppercase words separated by hyphens).
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The COBOL-CASED representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "hello world".cobolCased() // "HELLO-WORLD"
+    /// "api version".cobolCased(keep: ["API"]) // "API-VERSION"
+    /// ```
+    func cobolCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        cobolCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
+    }
+    
+    /// Converts the string to dot.notation (lowercased words separated by dots).
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The dot.notation representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "hello world".dotted() // "hello.world"
+    /// "API version".dotted(keep: ["API"]) // "API.version"
+    /// ```
+    func dotted(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        dotNotation(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
+    }
+    
+    /// Converts the string to path/case (lowercased words separated by forward slashes).
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The path/case representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "Hello world".pathCased() // "hello/world"
+    /// "API version".pathCased(keep: ["API"]) // "API/version"
+    /// ```
+    func pathCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        pathCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
+    }
+    
+    /// Converts the string to space case (lowercased words separated by spaces).
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The space cased representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "Hello-World".spaceCased() // "hello world"
+    /// "API Version".spaceCased(keep: ["API"]) // "API version"
+    /// ```
+    func spaceCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        spaceCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
+    }
+    
+    /// Converts the string to Capital Case (title-cased words separated by spaces).
+    ///
+    /// - Parameters:
+    ///   - keepSpecialCharacters: If `true`, preserves special characters instead of stripping them. Default is `false`.
+    ///   - keep: Substrings (like acronyms) to preserve as-is during casing. Default is an empty array.
+    /// - Returns: The Capital Cased representation of the string.
+    ///
+    /// - Example:
+    /// ```swift
+    /// "hello world".capitalCased() // "Hello World"
+    /// "api version".capitalCased(keep: ["API"]) // "API Version"
+    /// ```
+    func capitalCased(keepSpecialCharacters: Bool = false, keep: [String] = []) -> String {
+        capitalCase(self, keepSpecialCharacters: keepSpecialCharacters, keep: keep)
     }
 }
 

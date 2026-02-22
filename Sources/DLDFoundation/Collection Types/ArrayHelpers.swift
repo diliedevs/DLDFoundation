@@ -9,7 +9,6 @@
 import Foundation
 
 public extension Array {
-    
     // MARK: - Converting to NSArray
     /// An NSArray object representing the array.
     var nsArray: NSArray {
@@ -65,17 +64,4 @@ public extension Array where Element: Hashable {
     mutating func remove(_ element: Element) {
         removeAll { $0 == element }
     }
-}
-
-public extension Array where Element: Identifiable {
-    subscript(id: Element.ID, defaultElement: Element) -> Element {
-        get {
-            first(where: { $0.id == id }) ?? defaultElement
-        }
-        set(newValue) {
-            if let idx = firstIndex(where: { $0.id == newValue.id }) {
-                self[idx] = newValue
-            }
-        }
-    } 
 }

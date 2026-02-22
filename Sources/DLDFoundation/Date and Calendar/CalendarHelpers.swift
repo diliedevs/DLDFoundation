@@ -8,12 +8,6 @@
 
 import Foundation
 
-// MARK: - Convenience Calendar
-/// The user's current calendar.
-///
-/// This calendar does not track changes that the user makes to their preferences.
-public var curCal = Calendar.current
-
 /// A type alias for`Calendar.Component`, an enumeration for the various components of a calendar date.
 public typealias CalUnit = Calendar.Component
 

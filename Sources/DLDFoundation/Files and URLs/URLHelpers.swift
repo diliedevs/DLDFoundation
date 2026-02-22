@@ -9,80 +9,19 @@
 import Foundation
 
 public extension URL {
-    
-    // MARK: - Getting System Directory URLs
-    /// Returns the URL for the home directory of the current user.
-    static var home: URL {
-        if #available(macOS 13.0, iOS 16.0, *) { return .homeDirectory }
-        
-        return URL(fileURLWithPath: NSHomeDirectory())
-    }
-    /// Returns the URL for the desktop directory of the current user.
-    static var desktop: URL {
-        if #available(macOS 13.0, iOS 16.0, *) { return .desktopDirectory }
-        
-        return Filer.shared.userURL(for: .desktopDirectory)
-    }
-    /// Returns the URL for the documents directory of the current user.
-    static var documents: URL {
-        if #available(macOS 13.0, iOS 16.0, *) { return .documentsDirectory }
-        
-        return Filer.shared.userURL(for: .documentDirectory)
-    }
-    /// Returns the URL for the downloads directory of the current user.
-    static var downloads: URL {
-        if #available(macOS 13.0, iOS 16.0, *) { return .downloadsDirectory }
-        
-        return Filer.shared.userURL(for: .downloadsDirectory)
-    }
-    /// Returns the URL for the application support directory for all applications of the current user.
-    static var appSupport: URL {
-        if #available(macOS 13.0, iOS 16.0, *) { return .applicationSupportDirectory }
-        
-        return Filer.shared.userURL(for: .applicationSupportDirectory)
-    }
-    /// Returns the URL for the application support directory for the application of the current user.
-    static var appSupportDocs: URL {
-        let asd = appSupport.appendingPathComponent(Bundle.main.name, isDirectory: true)
-        _ = try? Filer.shared.createDirectory(at: asd)
-        
-        return asd
-    }
-    /// Returns the URL for the local trash directory.
-    static var trash: URL {
-        if #available(macOS 13.0, iOS 16.0, *) { return .trashDirectory }
-        
-        return Filer.shared.localURL(for: .trashDirectory)
-    }
-    /// Returns the URL for the local applications directory.
-    static var applications: URL {
-        if #available(macOS 13.0, iOS 16.0, *) { return .applicationDirectory }
-        
-        return Filer.shared.localURL(for: .applicationDirectory)
-    }
-    /// Returns the URL for the temporary directory.
-    static var temp: URL {
-        if #available(macOS 13.0, iOS 16.0, *) { return .temporaryDirectory }
-        
-        return Filer.shared.temporaryDirectory
-    }
-    
     // MARK: - URL Properties
-    var cleanPath: String {
-        if #available(macOS 13.0, iOS 16.0, *) { return path(percentEncoded: false) }
-        
-        return path
-    }
+
     /// Returns `true` if the URL path represents a directory.
     var isDirectory: Bool {
-        return hasDirectoryPath
+        let values = try? resourceValues(forKeys: [.isDirectoryKey])
+        return values?.isDirectory ?? hasDirectoryPath
     }
     /// Returns `true` if the URL path represents a file.
     var isFile: Bool {
         return isDirectory == false
     }
     var exists: Bool {
-        return Filer.shared.fileExists(atPath: path)
+        return (try? checkResourceIsReachable()) ?? false
     }
     /// Returns the URL for the parent directory.
     var directoryURL: URL {
@@ -100,12 +39,9 @@ public extension URL {
     var name: String {
         return withoutExtension.lastPathComponent
     }
-    
+
     // MARK: - Creating URLs
-    /// Returns a new URL by appending the string to the right of the plus sign to the url on the left.
-    /// - Parameters:
-    ///   - lhs: The URL to append the string path component to.
-    ///   - rhs: A string representing a path component to append to the URL.
+    /// Returns a new URL by appending the string to the right of the plus sign to the URL on the left.
     static func + (lhs: URL, rhs: String) -> URL {
         lhs.appendingPathComponent(rhs)
     }
@@ -132,15 +68,22 @@ public extension URL {
     /// - returns: An array of urls for the contents of the specified directory.
     func contentsOfDirectory(deepEnumeration deep: Bool, relativeURLs: Bool = true, includeHidden: Bool = false, includePackageContents: Bool = false) throws -> [URL] {
         guard isDirectory else { return [] }
-        
-        return try Filer.shared.contentsOfDirectory(at: self, deepEnumeration: deep, relativeURLs: relativeURLs, includeHidden: includeHidden, includePackageContents: includePackageContents)
+
+        return try FileManager
+            .default.contentsOfDirectory(
+                at: self,
+                deepEnumeration: deep,
+                relativeURLs: relativeURLs,
+                includeHidden: includeHidden,
+                includePackageContents: includePackageContents
+            )
     }
     /// Performs a shallow search of the receiving directory URL and returns the URLs for any contained items.
     /// - Parameters:
     ///   - includeHidden: Set to `true` to include hidden files in the result. Default is set to `false`, skipping hidden files.
     /// - Returns: An array of URLs for the contents of the receiving directory URL.
     func quickScan(includeHidden: Bool = false) throws -> [URL] {
-        try Filer.shared.quickScan(url: self, includeHidden: includeHidden)
+        try FileManager.default.quickScan(url: self, includeHidden: includeHidden)
     }
     /// Performs a deep search of the receiving directory URL and returns the URLs for any contained items.
     /// - Parameters:
@@ -150,17 +93,6 @@ public extension URL {
     /// - Returns: An array of URLs for the contents of the receiving directory URL.
     func recursiveScan(relativeURLs: Bool = true, includeHidden: Bool = false, includePackageContents: Bool = false) throws -> [URL] {
         try contentsOfDirectory(deepEnumeration: true, relativeURLs: relativeURLs, includeHidden: includeHidden, includePackageContents: includePackageContents)
-    }
-}
-
-@available(macOS 13.0, iOS 16.0, *)
-public extension URL {
-    init(base: String, endpoint: String, queryItems: [URLQueryItem] = []) {
-        self.init(string: base)!
-        self.append(component: endpoint)
-        if queryItems.isNotEmpty {
-            self.append(queryItems: queryItems)
-        }
     }
 }
 

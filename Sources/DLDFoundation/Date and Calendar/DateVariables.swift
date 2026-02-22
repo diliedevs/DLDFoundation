@@ -11,15 +11,9 @@ import Foundation
 public extension Date {
     // MARK: - Common Date Indicators
     
-    /// The current date and time.
-    @available(macOS, obsoleted: 12, message: "Swift now has this same static property.")
-    @available(iOS, obsoleted: 15, message: "Swift now has this same static property.")
-    static var now: Date {
-        return Date()
-    }
     /// The `Date` object at the start of today.
     static var today: Date {
-        return curCal.startOfDay(for: now)
+        return Calendar.autoupdatingCurrent.startOfDay(for: now)
     }
     /// The week number for today's date.
     static var thisWeek: Int {
@@ -37,7 +31,7 @@ public extension Date {
     // MARK: - Getting Date Components
     /// All components of the `Date` object.
     var components: DateComponents {
-        return curCal.dateComponents(Set(CalUnit.all), from: self)
+        return Calendar.autoupdatingCurrent.dateComponents(Set(CalUnit.all), from: self)
     }
     /// The year of the date object.
     var year: Int {
@@ -73,15 +67,7 @@ public extension Date {
     }
     /// The number of days in the month of the date object.
     var daysInMonth: Int {
-        if let count = curCal.range(of: .day, in: .month, for: self)?.count {
-            return count
-        } else {
-            if month == 2 {
-                return year.isMultiple(of: 4) ? 29 : 28
-            } else {
-                return [4, 6, 9, 11].contains(month) ? 30 : 31
-            }
-        }
+        Calendar.autoupdatingCurrent.range(of: .day, in: .month, for: self)?.count ?? 0
     }
     
     /// Returns `true` if the date is in the distant past in terms of centuries.
@@ -106,7 +92,7 @@ public extension Date {
 
 fileprivate extension Date {
     func component(_ comp: Calendar.Component) -> Int {
-        curCal.component(comp, from: self)
+        Calendar.autoupdatingCurrent.component(comp, from: self)
     }
 }
 

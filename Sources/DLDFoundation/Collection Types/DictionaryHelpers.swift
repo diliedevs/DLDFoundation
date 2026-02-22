@@ -36,9 +36,3 @@ public extension Dictionary where Key == String {
         return self[key] as? Double ?? defaultvalue
     }
 }
-
-public extension Dictionary where Value: OptionalType {
-    func removingNilValues() -> [Key: Value.Wrapped] {
-        self.compactMapValues { $0.optional }
-    }
-}

@@ -7,15 +7,13 @@
 
 import Foundation
 
-extension URLQueryItem: Comparable {
-    public static func < (lhs: URLQueryItem, rhs: URLQueryItem) -> Bool {
-        lhs.name < rhs.name
-    }
-}
-
 public extension Collection where Element == URLQueryItem {
     subscript(_ name: String) -> String? {
         first(where: { $0.name == name })?.value
+    }
+    
+    func sortedByName() -> [URLQueryItem] {
+        sorted { $0.name < $1.name }
     }
 }
 

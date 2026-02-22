@@ -22,15 +22,6 @@ public extension Array where Element: Hashable {
     }
 }
 
-public extension Optional where Wrapped == NSSet {
-    /// Returns an array of all the elements in the optional `NSSet` as the given type or an empty array.
-    func asArray<T>(of type: T.Type = T.self) -> [T] {
-        guard let theSet = self else { return [] }
-        
-        return theSet.allObjects as? [T] ?? []
-    }
-}
-
 public extension SetAlgebra {
     /// Toggles the given element of the set, by removing it if it is present in the set, or otherwise inserting it.
     /// - Parameter element: The element of the set to toggle.

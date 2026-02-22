@@ -13,19 +13,19 @@ public extension Date {
     // MARK: - Date Comparisons
     /// Returns `true` if the date is in today's date.
     var isToday: Bool {
-        return curCal.isDateInToday(self)
+        return Calendar.autoupdatingCurrent.isDateInToday(self)
     }
     /// Returns `true` if the date is in yesterday's date.
     var isYesterday: Bool {
-        return curCal.isDateInYesterday(self)
+        return Calendar.autoupdatingCurrent.isDateInYesterday(self)
     }
     /// Returns `true` if the date is in tomorrow's date.
     var isTomorrow: Bool {
-        return curCal.isDateInTomorrow(self)
+        return Calendar.autoupdatingCurrent.isDateInTomorrow(self)
     }
     /// Returns `true` if the date falls in the weekend.
     var isWeekend: Bool {
-        return curCal.isDateInWeekend(self)
+        return Calendar.autoupdatingCurrent.isDateInWeekend(self)
     }
     /// Returns `true` if the date is typically a workday or weekday.
     var isWorkday: Bool {
@@ -59,6 +59,6 @@ public extension Date {
     ///
     /// - returns: `true` if the two dates are equal up to the specified component (unit) of granularity.
     func isSameAs(_ otherDate: Date, toGranularity unit: CalUnit) -> Bool {
-        return curCal.isDate(self, equalTo: otherDate, toGranularity: unit)
+        return Calendar.autoupdatingCurrent.isDate(self, equalTo: otherDate, toGranularity: unit)
     }
 }

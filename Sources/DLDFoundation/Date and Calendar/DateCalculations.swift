@@ -17,13 +17,13 @@ public extension Date {
     ///
     /// - returns: The new date after changing the date to the specified date components and their given values.
     func changing(_ unitValues: [CalUnit: Int]) -> Date {
+        let calendar = Calendar.autoupdatingCurrent
         var comps = components
         for (unit, value) in unitValues {
-            let realUnit = unit == .year ? .yearForWeekOfYear : unit
-            comps.setValue(value, for: realUnit)
+            comps.setValue(value, for: unit)
         }
         
-        return Date(components: comps)
+        return calendar.date(from: comps) ?? self
     }
     
     // MARK: - Calculating Time Intervals
@@ -34,7 +34,16 @@ public extension Date {
     ///
     /// - returns: The interval between the date and another given date as a `Double` in the specified `CalUnit`.
     func preciseCount(of unit: CalUnit, toDate date: Date) -> Double {
-        return date.timeIntervalSince(self).count(unit: unit)
+        let interval = date.timeIntervalSince(self)
+        let calendar = Calendar.autoupdatingCurrent
+        let countedUnit = unit == .week ? .weekOfYear : unit
+
+        if [.second, .minute, .hour, .day, .weekOfYear, .month, .year].contains(countedUnit) {
+            return interval.count(unit: countedUnit)
+        }
+
+        let value = calendar.dateComponents([countedUnit], from: self, to: date).value(for: countedUnit) ?? 0
+        return Double(value)
     }
     /// The interval between the date and another given date as an `Int` in the specified `CalUnit`.
     ///
@@ -53,9 +62,13 @@ public extension Date {
     ///
     /// - returns: A new `Date` object that is set to the start of `unit` of the date.
     func start(of unit: CalUnit) -> Date {
-        if unit == .week {
-            return start(of: .day) - TimeInterval(weekday - 1).days
+        let calendar = Calendar.autoupdatingCurrent
+        let intervalUnit = unit == .week ? .weekOfYear : unit
+        
+        if let start = calendar.dateInterval(of: intervalUnit, for: self)?.start {
+            return start
         }
+        
         switch unit {
         case .second     : return changing([.nanosecond: 0])
         case .minute     : return changing([.nanosecond: 0, .second: 0])
@@ -73,6 +86,12 @@ public extension Date {
     ///
     /// - returns: A new `Date` object that is set to the end of `unit` of the date.
     func end(of unit: CalUnit) -> Date {
+        let calendar = Calendar.autoupdatingCurrent
+        let intervalUnit = unit == .week ? .weekOfYear : unit
+        if let interval = calendar.dateInterval(of: intervalUnit, for: self) {
+            return interval.end - 1.second
+        }
+        
         return next(unit: unit).start(of: unit) - 1.second
     }
     
@@ -82,8 +101,9 @@ public extension Date {
     ///
     /// - returns: A new `Date` object that is set to the next specified `unit` of the date.
     func next(unit: CalUnit) -> Date {
-        let realUnit = unit == .week ? .weekOfYear : unit
-        return self + TimeInterval.one(realUnit)
+        let calendar = Calendar.autoupdatingCurrent
+        let countedUnit = unit == .week ? .weekOfYear : unit
+        return calendar.date(byAdding: countedUnit, value: 1, to: self) ?? self
     }
     
     /// A new `Date` object that is set to the previous specified `CalUnit` of the date.
@@ -92,7 +112,8 @@ public extension Date {
     ///
     /// - returns: A new `Date` object that is set to the previous specified `unit` of the date.
     func previous(unit: CalUnit) -> Date {
-        let realUnit = unit == .week ? .weekOfYear : unit
-        return self - TimeInterval.one(realUnit)
+        let calendar = Calendar.autoupdatingCurrent
+        let countedUnit = unit == .week ? .weekOfYear : unit
+        return calendar.date(byAdding: countedUnit, value: -1, to: self) ?? self
     }
 }
