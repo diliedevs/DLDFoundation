@@ -184,6 +184,35 @@ struct DateHelpersTests {
         #expect(abs(preciseDayCount - 1.5) < 0.0001)
         #expect(wholeDayCount == 1)
     }
+
+    @Test("precise month and year counts follow calendar boundaries")
+    func preciseMonthAndYearCountsUseCalendarUnits() throws {
+        let calendar = Calendar.autoupdatingCurrent
+        let start = try #require(calendar.date(from: DateComponents(year: 2024, month: 2, day: 1, hour: 12)))
+        let oneMonthLater = try #require(calendar.date(from: DateComponents(year: 2024, month: 3, day: 1, hour: 12)))
+        let oneYearLater = try #require(calendar.date(from: DateComponents(year: 2025, month: 2, day: 1, hour: 12)))
+
+        #expect(start.preciseCount(of: .month, toDate: oneMonthLater) == 1)
+        #expect(start.preciseCount(of: .year, toDate: oneYearLater) == 1)
+    }
+
+    @Test("changing year updates year component")
+    func changingYearUpdatesYear() throws {
+        let calendar = Calendar.autoupdatingCurrent
+        let juneDate = try #require(calendar.date(from: DateComponents(year: 2021, month: 6, day: 15, hour: 12)))
+        let newYearDate = try #require(calendar.date(from: DateComponents(year: 2021, month: 1, day: 1, hour: 12)))
+
+        let juneUpdated = juneDate.changing([.year: 2020])
+        let newYearUpdated = newYearDate.changing([.year: 2020])
+
+        #expect(juneUpdated.year == 2020)
+        #expect(juneUpdated.month == juneDate.month)
+        #expect(juneUpdated.day == juneDate.day)
+
+        #expect(newYearUpdated.year == 2020)
+        #expect(newYearUpdated.month == newYearDate.month)
+        #expect(newYearUpdated.day == newYearDate.day)
+    }
 }
 
 private func makeFixtureDirectory() throws -> URL {

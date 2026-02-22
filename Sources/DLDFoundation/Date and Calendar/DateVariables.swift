@@ -82,26 +82,11 @@ public extension Date {
     var isDistant: Bool {
         isDistantPast || isDistantFuture
     }
-    
-    // MARK: - Converting to NSDate
-    /// The date as an `NSDate` object.
-    var ns: NSDate {
-        return self as NSDate
-    }
 }
 
 fileprivate extension Date {
     func component(_ comp: Calendar.Component) -> Int {
         Calendar.autoupdatingCurrent.component(comp, from: self)
-    }
-}
-
-public extension NSDate {
-    
-    // MARK: - Converting to Date
-    /// The `NSDate` as a `Date` object.
-    var date: Date {
-        return self as Date
     }
 }
 
