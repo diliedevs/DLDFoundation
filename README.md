@@ -3,12 +3,6 @@
 </p>
 
 <p align="center">
-	<!--<a href="https://swiftpackageindex.com/diliedevs/DLDFoundation">
-		<img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdiliedevs%2FDLDFoundation%2Fbadge%3Ftype%3Dswift-versions" alt="Swift versions" />
-	</a>
-	<a href="https://swiftpackageindex.com/diliedevs/DLDFoundation">
-		<img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdiliedevs%2FDLDFoundation%2Fbadge%3Ftype%3Dplatforms" alt="Swift versions" />
-	</a>-->
 	<a href="https://github.com/diliedevs/DLDFoundation">
 		<img src="https://img.shields.io/badge/Swift-6.2-F05138?logo=swift" alt="Swift Version">
 	</a>
