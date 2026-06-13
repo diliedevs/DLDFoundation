@@ -8,10 +8,21 @@
 
 import Foundation
 
-func debugLog(_ message: Any, file: String = #file, function: String = #function, line: Int = #line) {
+func dbg(
+    _ items: Any...,
+    separator: String = " ",
+    terminator: String = "\n",
+    file: String = #file,
+    function: String = #function,
+    line: Int = #line
+) {
     #if DEBUG
+    let time = Date.now.formatted(date: .omitted, time: .standard)
     let fileName = URL(filePath: file).name
-    let info = "\(fileName).\(function)[\(line)]"
-    print("🔍 \(info) -> \(message)")
+    let infoSeparator = items.count == 1 ? " → " : " →\n"
+    let info = "[\(time)] \(fileName):\(line) \(function)"
+    let itemDescs = items.map(String.init(describing:)).joined(separator: separator)
+    
+    print(info, itemDescs, separator: infoSeparator, terminator: terminator)
     #endif
 }

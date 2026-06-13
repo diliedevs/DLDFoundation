@@ -27,7 +27,7 @@ public extension String {
     
     /// Returns the receiving string surrounded by double quotes, i.e. `"string"`.
     var quoted: String {
-        "\"\(self)\""
+        return "\"\(self)\""
     }
     
     /// Returns `true` if the string is a valid email address.
